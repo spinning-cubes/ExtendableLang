@@ -1,0 +1,5 @@
+import time as rdsa
+class time:
+    @staticmethod
+    def wait(amount):
+        rdsa.sleep(float(amount))
