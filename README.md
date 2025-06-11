@@ -15,11 +15,3 @@ This library provides us with two functions, `stdio:get()` and `stdio:print()`.
 stdio:print("Hello, world!")
 ```
 And with that, you made your first program!
-
-# Files
-The `fs` library is able to read files (via `FS:read()`) and write (via `FS:write()`).  
-### FS:read()
-This function accepts one argument: the file name (Example: `FS:read("myfile.txt")`)
-### FS:write()
-This function accepts two arguments: the file name and data to write (Example: `FS:write("myfile.txt", "Hello, world!")`)  
-*Yes, I'll add appending soon!*
