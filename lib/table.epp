@@ -1,0 +1,111 @@
+import json
+
+# helper functions for JSON
+
+def create_blank_json(json_type: str) -> str:
+    if json_type == 'dictionary':
+        return '{}'
+    elif json_type == 'array':
+        return '[]'
+    else:
+        raise ValueError("Unsupported JSON type. Please choose 'dictionary' or 'array'.")
+
+def add_item(json_string: str, key_or_value, value=None, index: int = None) -> str:
+    try:
+        data = json.loads(json_string)
+    except json.JSONDecodeError:
+        raise ValueError("Invalid JSON string provided.")
+
+    if isinstance(data, dict):
+        if value is None:
+            raise ValueError("For a JSON dictionary, 'value' must be provided when adding an item.")
+        data[key_or_value] = value
+    elif isinstance(data, list):
+        if index is not None:
+            if not isinstance(index, int) or index < 0 or index > len(data):
+                raise ValueError("Invalid index for array insertion.")
+            data.insert(index, key_or_value)
+        else:
+            data.append(key_or_value)
+    else:
+        raise ValueError("Unsupported JSON structure. Expected a dictionary or an array.")
+
+    return json.dumps(data)
+
+def remove_item(json_string: str, key_or_value=None, index: int = None) -> str:
+    try:
+        data = json.loads(json_string)
+    except json.JSONDecodeError:
+        raise ValueError("Invalid JSON string provided.")
+
+    if isinstance(data, dict):
+        if key_or_value is None:
+            raise ValueError("For a JSON dictionary, 'key_or_value' (the key to remove) must be provided.")
+        if key_or_value not in data:
+            print(f"Warning: Key '{key_or_value}' not found in dictionary. JSON remains unchanged.")
+            return json_string
+        del data[key_or_value]
+    elif isinstance(data, list):
+        if key_or_value is not None and index is not None:
+            raise ValueError("Cannot specify both 'key_or_value' and 'index' for array removal.")
+        elif key_or_value is not None:
+            try:
+                data.remove(key_or_value)
+            except ValueError:
+                print(f"Warning: Value '{key_or_value}' not found in array. JSON remains unchanged.")
+                return json_string
+        elif index is not None:
+            if not isinstance(index, int) or index < 0 or index >= len(data):
+                raise IndexError("Invalid index for array removal.")
+            del data[index]
+        else:
+            raise ValueError("For a JSON array, either 'key_or_value' or 'index' must be provided for removal.")
+    else:
+        raise ValueError("Unsupported JSON structure. Expected a dictionary or an array.")
+
+    return json.dumps(data)
+
+def get_item(json_string: str, key=None, index: int = None):
+    try:
+        data = json.loads(json_string)
+    except json.JSONDecodeError:
+        raise ValueError("Invalid JSON string provided.")
+
+    if key is not None and index is not None:
+        raise ValueError("Cannot specify both 'key' and 'index' when getting an item.")
+
+    if isinstance(data, dict):
+        if key is not None:
+            return data.get(key)  # .get() returns None if key not found
+        else:
+            raise ValueError("For a JSON dictionary, 'key' must be provided to get an item.")
+    elif isinstance(data, list):
+        if index is not None:
+            if not isinstance(index, int):
+                raise ValueError("Index for array retrieval must be an integer.")
+            if 0 <= index < len(data):
+                return data[index]
+            else:
+                print(f"Warning: Index {index} is out of bounds for array. Returning None.")
+                return None
+        else:
+            raise ValueError("For a JSON array, 'index' must be provided to get an item.")
+    else:
+        raise ValueError("Unsupported JSON structure. Expected a dictionary or an array.")
+
+
+# main code
+
+class table:
+    @staticmethod
+    def table():
+        return create_blank_json('dictionary')
+    @staticmethod
+    def add(table, key, data):
+        return add_item(table, key, value=data)
+    @staticmethod
+    def remove(table, key):
+        return remove_item(table, key)
+    @staticmethod
+    def get(table, key):
+        return get_item(table, key=key)
