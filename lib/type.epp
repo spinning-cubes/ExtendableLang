@@ -1,0 +1,13 @@
+class type:
+    @staticmethod
+    def toint(data):
+        return int(data)
+    @staticmethod
+    def tostr(data):
+        return str(data)
+    @staticmethod
+    def tofloat(data):
+        return float(data)
+    @staticmethod
+    def tolist(data):
+        return list(data)
