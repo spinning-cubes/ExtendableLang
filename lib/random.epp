@@ -1,0 +1,5 @@
+import random as rdsa
+class random:
+    @staticmethod
+    def random(min, max):
+        return rdsa.randint(int(min), int(max))
