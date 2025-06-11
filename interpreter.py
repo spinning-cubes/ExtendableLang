@@ -46,7 +46,7 @@ class ELInterpreter:
             if stripped_line.startswith('@') or (not stripped_line.startswith(';') and stripped_line):
                 processed_lines.append(stripped_line)
         self.program_lines = processed_lines
-        self._map_labels() # Map labels AFTER processing all lines to get correct indices
+        self._map_labels()
 
         if self.debug:
             print(f"\n--- Debug: Program Lines ---")
@@ -65,7 +65,7 @@ class ELInterpreter:
         """
         for i, line in enumerate(self.program_lines):
             if line.startswith('@'):
-                label_name = line[1:] # Store label name WITHOUT the '@'
+                label_name = line[1:]
                 self.labels[label_name] = i
 
     def run(self):
@@ -90,7 +90,7 @@ class ELInterpreter:
                 next_index_after_if_structure = self._handle_if_statement(self.current_line_index)
                 if next_index_after_if_structure is None:
                     print(f"Error: Malformed IF statement at line {self.current_line_index}. Halting program.")
-                    break # Halt on error
+                    break
                 
                 # _handle_if_statement returns the actual next line index, which could be a jump target
                 self.current_line_index = next_index_after_if_structure 
@@ -99,10 +99,8 @@ class ELInterpreter:
                 original_index_before_exec = self.current_line_index # Store to detect jumps
                 self._execute_single_statement(line)
                 
-                # If a jump occurred, _execute_single_statement would have updated self.current_line_index.
-                # In that case, we don't increment it further.
                 if self.current_line_index == original_index_before_exec:
-                    self.current_line_index += 1 # Only increment if no jump happened
+                    self.current_line_index += 1
 
     def _execute_single_statement(self, line):
         """
@@ -164,7 +162,7 @@ class ELInterpreter:
                         print(f"Error: Function '{function_name}' not found in library '{library_name}' for assignment.")
                 else:
                     print(f"Error: Extension library '{library_name}' not found for assignment.")
-            else: # General 'set var = value'
+            else:
                 parts = re.match(r"set (.+) = (.+)", line)
                 if parts:
                     var_name = parts.group(1).strip()
