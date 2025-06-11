@@ -1,0 +1,19 @@
+class FS:
+    @staticmethod
+    def write(name, data):
+        try:
+            with open(name, 'w') as file:
+                file.write(data.replace(r'\n', '\n'))
+            return "Write successful"
+        except Exception as e:
+            return f'Error writing to file "{name}": {e}'
+
+    @staticmethod
+    def read(name):
+        try:
+            with open(name, 'r') as file:
+                return file.read().replace(r'\n', '\n')
+        except FileNotFoundError:
+            return f'Error reading file "{name}": File not found'
+        except Exception as e:
+            return f'Error reading file "{name}": {e}'
